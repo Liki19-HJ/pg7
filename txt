@@ -1,0 +1,161 @@
+ 
+<!DOCTYPE html> 
+<html lang="en" ng-app="crudApp"> 
+ 
+<head> 
+    <meta charset="UTF-8"> 
+    <title>User CRUD App</title> 
+    <script 
+src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script> 
+    <style> 
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f4f4f4; 
+            margin: 0; 
+            padding: 0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+        } 
+ 
+        h2 { 
+            text-align: center; 
+            color: #333; 
+        } 
+ 
+        ul { 
+            list-style-type: none; 
+            padding: 0; 
+            margin: 0; 
+        } 
+ 
+        li { 
+            margin-bottom: 10px; 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+            background-color: #fff; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        } 
+ 
+        li span { 
+            flex-grow: 1; 
+ 
+ 
+ 
+ 
+ 
+        } 
+ 
+        form { 
+            margin-top: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        } 
+ 
+        label { 
+            margin-bottom: 5px; 
+            color: #333; 
+        } 
+ 
+        input { 
+            padding: 8px; 
+            border-radius: 5px; 
+            border: 1px solid #ddd; 
+            margin-bottom: 10px; 
+        } 
+ 
+        button { 
+            background-color: #4caf50; 
+            color: white; 
+            border: none; 
+            border-radius: 3px; 
+            padding: 8px; 
+            cursor: pointer; 
+            margin-top: 10px; 
+        } 
+ 
+        button.edit { 
+            background-color: #2196F3; 
+        } 
+ 
+        button.delete { 
+            background-color: #f44336; 
+        } 
+    </style> 
+</head> 
+ 
+<body ng-controller="UserController"> 
+    <h2>User CRUD App</h2> 
+    <!-- Display Users --> 
+    <ul> 
+        <li ng-repeat="user in users"> 
+            <span>{{ user.name }} - {{ user.email }}</span> 
+            <button class="edit" ng-click="editUser(user)">Edit</button> 
+ 
+ 
+ 
+ 
+ 
+            <button class="delete" ng-click="deleteUser(user)">Delete</button> 
+        </li> 
+    </ul> 
+    <!-- Add or Update User Form --> 
+    <form ng-submit="saveUser()"> 
+        <label>Name:</label> 
+        <input type="text" ng-model="currentUser.name" required> 
+ 
+        <label>Email:</label> 
+        <input type="email" ng-model="currentUser.email" required> 
+        <button type="submit">{{ isEditMode ? 'Update' : 'Add' }} User</button> 
+    </form> 
+ 
+    <script> 
+        angular.module('crudApp', []) 
+            .controller('UserController', function ($scope) { 
+                $scope.users = [ 
+                    { id: 1, name: 'John Doe', email: 'john@example.com' }, 
+                    { id: 2, name: 'Jane Smith', email: 'jane@example.com' }, 
+                    // Add more users as needed 
+                ]; 
+                $scope.currentUser = {}; 
+                $scope.isEditMode = false; 
+ 
+                $scope.editUser = function (user) { 
+                    $scope.currentUser = angular.copy(user); 
+                    $scope.isEditMode = true; 
+                }; 
+ 
+                $scope.saveUser = function () { 
+                    if ($scope.isEditMode) { 
+                        // Update existing user 
+                        var index = $scope.users.findIndex(u => u.id === $scope.currentUser.id); 
+                        $scope.users[index] = angular.copy($scope.currentUser); 
+                    } else { 
+                        // Add new user 
+                        $scope.currentUser.id = $scope.users.length + 1; 
+                        $scope.users.push(angular.copy($scope.currentUser)); 
+                    } 
+                    // Clear form and reset mode 
+                    $scope.currentUser = {}; 
+                    $scope.isEditMode = false; 
+                }; 
+ 
+                $scope.deleteUser = function (user) { 
+                    var index = $scope.users.indexOf(user); 
+                    $scope.users.splice(index, 1); 
+                }; 
+ 
+ 
+ 
+ 
+ 
+            }); 
+    </script> 
+</body> 
+ 
+</html> 
